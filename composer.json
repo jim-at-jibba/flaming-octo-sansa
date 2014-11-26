@@ -1,0 +1,19 @@
+{
+    "name": "CTC Main Site",
+    "description": "CTC Main Site",
+    "keywords": ["microframework","rest","router"],
+    "homepage": "https://github.com/jim-at-jibba/Bones-Slim-Idiorm-Starter",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "James Best",
+            "email": "jim@justjibba.net"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0",
+        "slim/slim-skeleton": "dev-master",
+        "swiftmailer/swiftmailer": "@stable"
+    }
+}
