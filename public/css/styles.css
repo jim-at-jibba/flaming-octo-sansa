@@ -7129,3 +7129,22 @@ th.hide-for-touch {
 
 .fa-bomb:before {
   content: "\f1e2"; }
+
+
+body.home{
+    background: url('../img/success_kid.jpg') fixed no-repeat;
+    background-size: cover;
+    }
+
+.bubble{
+    height: 15%;
+    background: white;
+    border-radius: 10px;
+    margin-top : 30%;
+    padding : 40px;
+    }
+
+.home-in{
+    font-size: 70px;
+    color: red;
+    }

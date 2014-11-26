@@ -1,6 +1,6 @@
 <?php
-    session_cache_limiter( FALSE );
-//    session_start(); //Start session for flash message use.
+    session_cache_limiter( false );
+    //    session_start(); //Start session for flash message use.
     date_default_timezone_set( 'UTC' );
     //error_reporting( -1 );
     ini_set( 'display_errors', 1 );
@@ -9,11 +9,11 @@
     /**
      * Define some constants
      */
-    define("DS", "/");
-    define("ROOT", realpath(dirname(__DIR__)) . DS);
-    define("VENDORDIR", ROOT . "vendor" . DS);
-    define("ROUTEDIR", ROOT . "app" . DS . "routes" . DS);
-    define("TEMPLATEDIR", ROOT . "app" . DS . "templates" . DS);
+    define( "DS", "/" );
+    define( "ROOT", realpath( dirname( __DIR__ ) ) . DS );
+    define( "VENDORDIR", ROOT . "vendor" . DS );
+    define( "ROUTEDIR", ROOT . "app" . DS . "routes" . DS );
+    define( "TEMPLATEDIR", ROOT . "app" . DS . "templates" . DS );
 
 
     require '../app/config/config.php';
@@ -35,54 +35,58 @@
     $app->add( new \Slim\Middleware\SessionCookie() );
 
     // Handle the possible 403 the middleware can throw
-    $app->error(
-        function ( \Exception $e ) use ( $app ) {
-            if ($e instanceof HttpForbiddenException) {
-                return $app->render( '403.twig', array ( 'e' => $e ), 403 );
-            }
-            // You should handle other exceptions here, not throw them
-            throw $e;
+    $app->error( function ( \Exception $e ) use ( $app ) {
+        if ($e instanceof HttpForbiddenException) {
+            return $app->render( '403.twig', array ( 'e' => $e ), 403 );
         }
-    );
+        // You should handle other exceptions here, not throw them
+        throw $e;
+    } );
 
 
     // Create monolog logger and store logger in container as singleton
     // (Singleton resources retrieve the same log resource definition each time)
     $app->container->singleton( 'log', function () {
-            $log = new \Monolog\Logger( 'ctc-main-site' );
-            $log->pushHandler( new \Monolog\Handler\StreamHandler( '../logs/app.log', \Monolog\Logger::DEBUG ) );
+        $log = new \Monolog\Logger( 'ctc-main-site' );
+        $log->pushHandler( new \Monolog\Handler\StreamHandler( '../logs/app.log', \Monolog\Logger::DEBUG ) );
 
-            return $log;
-        }
-    );
+        return $log;
+    } );
 
     // Prepare view
     $app->view( new \Slim\Views\Twig() );
-    $app->view->parserOptions    = array ( 'charset'          => 'utf-8',
-                                           'cache'            => realpath( '../templates/cache' ),
-                                           'auto_reload'      => TRUE,
-                                           'strict_variables' => FALSE,
-                                           'autoescape'       => TRUE
+    $app->view->parserOptions    = array (
+        'charset'          => 'utf-8',
+        'cache'            => realpath( '../templates/cache' ),
+        'auto_reload'      => true,
+        'strict_variables' => false,
+        'autoescape'       => true,
+        'debug' => true
     );
-    $app->view->parserExtensions = array ( new \Slim\Views\TwigExtension() );
+    $app->view->parserExtensions = array (
+        new \Slim\Views\TwigExtension(),
+        new Twig_Extension_Debug()
+    );
 
     // Define routes
 
     //get all
     $app->get( '/', function () use ( $app ) {
-            // Sample log message
-            $app->log->info( "ctc-main-site '/' route" );
-            //Pull data from DB
-            //$users = ORM::for_table('users')->find_result_set();
-            // Render index view
-            $app->render( 'index.twig' );
-        }
-    );
+        // Sample log message
+        $app->log->info( "ctc-main-site '/' route" );
+
+        $d1 = new DateTime('', new DateTimeZone('Asia/Bangkok'));
+
+        $d2   = new DateTime( "2015-07-06", new DateTimeZone('Asia/Bangkok') );
+        $diff = $d2->diff( $d1 );
+
+        $app->render( 'index.twig', array('diff' => $diff, 'd1' => $d1, 'd2' => $d2) );
+    } );
 
     /**
      * Include all files located in routes directory
      */
-    foreach(glob(ROUTEDIR . '*.php') as $router) {
+    foreach (glob( ROUTEDIR . '*.php' ) as $router) {
         require_once $router;
     }
 

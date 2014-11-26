@@ -1,12 +1,13 @@
 {% extends "base.twig" %}
 
 {% block content %}
+    <div class="small-6 small-offset-6 columns">
+        <div class="bubble">
 
-    <p>
-        You are currently <strong>Logged {% if hasIdentity %}In{% else %}Out</strong>{% endif %}.
-    </p>
-    <p>
-        Your current role is <strong>{{ role|capitalize }}</strong>.
-    </p>
+            <span class="woo">Woohoo</span> we are going home in <span class="home-in">{{ diff.days }}</span> days
+
+        </div>
+    </div>
+
 
 {% endblock %}
